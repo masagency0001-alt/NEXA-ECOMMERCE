@@ -12,28 +12,35 @@ export default function Preloader() {
       className="fixed inset-0 z-[100] bg-dark flex items-center justify-center pointer-events-none"
     >
       <div className="relative flex flex-col items-center">
-        <motion.h1
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, ease: "easeOut" }}
-          className="text-4xl md:text-6xl font-bold tracking-[0.5em] text-white"
-        >
-          NEX<span className="text-gold">A</span>
-        </motion.h1>
         <motion.div
-          initial={{ width: 0 }}
-          animate={{ width: "100%" }}
-          transition={{ duration: 1.5, delay: 0.5, ease: "easeInOut" }}
-          className="h-[1px] bg-gold mt-4"
-        />
-        <motion.p
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ delay: 1, duration: 0.8 }}
-          className="text-white/30 text-[10px] uppercase tracking-[0.3em] font-medium mt-6"
+           initial={{ scale: 0.8, opacity: 0 }}
+           animate={{ scale: 1, opacity: 1 }}
+           transition={{ duration: 1.2, ease: [0.16, 1, 0.3, 1] }}
+           className="relative"
         >
-          Luxury Redefined
-        </motion.p>
+          <motion.h1
+            className="text-6xl md:text-9xl font-bold tracking-[0.6em] text-white italic font-serif"
+          >
+            NEX<span className="text-gold">A</span>
+          </motion.h1>
+          <motion.div
+            initial={{ width: 0 }}
+            animate={{ width: "100%" }}
+            transition={{ duration: 1.5, delay: 0.5, ease: "easeInOut" }}
+            className="absolute -bottom-4 left-0 h-[2px] bg-gold shadow-[0_0_20px_rgba(197,160,89,0.5)]"
+          />
+        </motion.div>
+        
+        <div className="overflow-hidden mt-12">
+          <motion.p
+            initial={{ y: "100%" }}
+            animate={{ y: 0 }}
+            transition={{ delay: 1, duration: 1, ease: [0.16, 1, 0.3, 1] }}
+            className="text-white/40 text-[10px] uppercase tracking-[0.5em] font-bold"
+          >
+            The Zenith of Modern Luxury
+          </motion.p>
+        </div>
       </div>
     </motion.div>
   );

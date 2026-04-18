@@ -10,53 +10,71 @@ function ProductCard({ product, index }: any) {
 
   return (
     <motion.div
-      initial={{ opacity: 0, y: 30 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ delay: index * 0.05, duration: 0.8 }}
+      layout
+      initial={{ opacity: 0, scale: 0.9 }}
+      whileInView={{ opacity: 1, scale: 1 }}
+      viewport={{ once: true }}
+      exit={{ opacity: 0, scale: 0.9, transition: { duration: 0.3 } }}
+      transition={{ 
+        delay: index * 0.05, 
+        duration: 0.8, 
+        ease: [0.16, 1, 0.3, 1] 
+      }}
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
-      className="group"
+      className="group relative"
     >
-      <div className="relative aspect-[3/4] overflow-hidden bg-dark/50 mb-6">
-        <Link to={`/product/${product.id}`}>
-          <img
+      <div className="relative aspect-[3/4] overflow-hidden bg-[#111] mb-6 shadow-2xl">
+        <Link to={`/product/${product.id}`} className="block w-full h-full">
+          <motion.img
             src={isHovered && product.secondaryImage ? product.secondaryImage : product.image}
             alt={product.name}
-            className="w-full h-full object-cover transition-all duration-1000 group-hover:scale-105"
+            className="w-full h-full object-cover transition-all duration-1000"
+            animate={{ 
+              scale: isHovered ? 1.1 : 1,
+              filter: isHovered ? "brightness(0.7)" : "brightness(1)"
+            }}
           />
         </Link>
         
         {product.isNew && (
-          <div className="absolute top-4 left-4 bg-gold text-dark text-[10px] font-bold px-3 py-1 rounded-full uppercase tracking-widest z-10">
-            Arrival
+          <div className="absolute top-3 left-3 md:top-4 md:left-4 bg-gold text-dark text-[8px] md:text-[10px] font-black px-3 py-1 md:px-4 md:py-1.5 rounded-full uppercase tracking-tighter z-10 shadow-lg">
+            New Vision
           </div>
         )}
 
-        <AnimatePresence>
-          {isHovered && (
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: 10 }}
-              className="absolute bottom-6 left-6 right-6 flex items-center space-x-2 z-20"
-            >
-              <button className="flex-1 bg-white text-dark py-4 text-[10px] font-bold uppercase tracking-widest hover:bg-gold hover:text-white transition-colors duration-300">
-                Quick Add
-              </button>
-              <Link to={`/product/${product.id}`} className="p-4 bg-dark/50 backdrop-blur-md text-white border border-white/20 hover:bg-white hover:text-dark transition-colors duration-300">
-                <Eye size={18} />
-              </Link>
-            </motion.div>
-          )}
-        </AnimatePresence>
+        {/* Mobile View Toggle (Always slightly visible or appearing) */}
+        <div className={cn(
+          "absolute inset-x-3 bottom-3 md:inset-x-4 md:bottom-4 flex items-center space-x-2 z-20 transition-all duration-700",
+          isHovered ? "opacity-100 translate-y-0" : "opacity-0 md:opacity-0 translate-y-4 lg:group-hover:opacity-100 lg:group-hover:translate-y-0"
+        )}>
+          {/* On Mobile, we'll show them with a lower threshold or just let them stay hidden until tap? Actually, for 'fully responsive', they should be easy to hit. Let's make them appear on 'inView' for mobile? No, let's keep it clean but make them more visible on mobile 'always' but subtle. */}
+          <button className="flex-1 bg-white text-dark py-3 md:py-4 text-[9px] md:text-[10px] font-black uppercase tracking-[0.1em] md:tracking-[0.2em] hover:bg-gold transition-colors duration-500 rounded-sm">
+            Quick Bag
+          </button>
+          <Link 
+            to={`/product/${product.id}`} 
+            className="p-3 md:p-4 bg-black/40 backdrop-blur-xl text-white border border-white/10 hover:bg-gold hover:border-gold transition-all duration-500 rounded-sm"
+          >
+            <Eye size={18} />
+          </Link>
+        </div>
+        
+        {/* Subtle indicator for mobile */}
+        <div className="absolute inset-0 bg-gradient-to-t from-dark/60 via-transparent to-transparent opacity-40 lg:hidden pointer-events-none" />
       </div>
 
-      <div className="flex justify-between items-start space-x-4">
-        <div>
-          <p className="text-[10px] text-white/40 uppercase tracking-widest mb-1 italic font-serif">{product.category}</p>
-          <h3 className="text-sm tracking-widest text-white/90 group-hover:text-gold transition-colors">{product.name}</h3>
+      <div className="flex justify-between items-start pt-2 px-1">
+        <div className="max-w-[75%]">
+          <p className="text-[8px] md:text-[9px] text-gold uppercase tracking-[0.3em] font-black mb-1 md:mb-2 flex items-center gap-2">
+            <span className="w-3 h-[1px] bg-gold/30" />
+            {product.category}
+          </p>
+          <h3 className="text-xs md:text-sm font-medium tracking-tight text-white/90 group-hover:text-gold transition-colors duration-500 leading-tight truncate">
+            {product.name}
+          </h3>
         </div>
-        <p className="text-sm font-bold text-white">${product.price}</p>
+        <p className="text-sm font-bold text-white tracking-tighter">${product.price}</p>
       </div>
     </motion.div>
   );

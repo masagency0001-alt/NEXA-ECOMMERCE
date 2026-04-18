@@ -6,6 +6,8 @@ import { AnimatePresence, motion } from 'motion/react';
 import Header from '@/src/components/Header';
 import Footer from '@/src/components/Footer';
 import Preloader from '@/src/components/Preloader';
+import CustomCursor from '@/src/components/CustomCursor';
+import FloatingElements from '@/src/components/FloatingElements';
 
 // Pages
 import Home from '@/src/pages/Home';
@@ -68,11 +70,13 @@ export default function App() {
     <Router>
       <ScrollToTop />
       <Header cartCount={cart.length} />
+      <CustomCursor />
       <AnimatePresence mode="wait">
         {isLoading && <Preloader key="preloader" />}
       </AnimatePresence>
 
-      <main className="min-h-screen">
+      <main className="min-h-screen relative overflow-hidden">
+        <FloatingElements />
         <AnimatePresence mode="wait">
           <Routes>
             <Route index element={<PageWrapper><Home /></PageWrapper>} />

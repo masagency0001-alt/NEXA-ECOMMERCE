@@ -4,6 +4,45 @@ import { ShoppingBag, Search, Menu, X, Heart } from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';
 import { cn } from '@/src/lib/utils';
 
+function NavItem({ link }: any) {
+  const [isHovered, setIsHovered] = useState(false);
+
+  return (
+    <NavLink
+      to={link.path}
+      onMouseEnter={() => setIsHovered(true)}
+      onMouseLeave={() => setIsHovered(false)}
+      className={({ isActive }) => cn(
+        "relative text-[10px] uppercase tracking-[0.3em] font-bold transition-all duration-500 py-2",
+        isActive ? "text-gold" : "text-white/60 hover:text-white"
+      )}
+    >
+      {({ isActive }) => (
+        <>
+          <span className="relative z-10">{link.name}</span>
+          {isActive && (
+            <motion.div 
+              layoutId="activeNav"
+              className="absolute -bottom-1 left-0 w-full h-[1px] bg-gold"
+              transition={{ type: "spring", stiffness: 380, damping: 30 }}
+            />
+          )}
+          <AnimatePresence>
+            {isHovered && !isActive && (
+              <motion.div 
+                initial={{ width: 0 }}
+                animate={{ width: "100%" }}
+                exit={{ width: 0 }}
+                className="absolute -bottom-1 left-0 h-[1px] bg-white/20 origin-left"
+              />
+            )}
+          </AnimatePresence>
+        </>
+      )}
+    </NavLink>
+  );
+}
+
 export default function Header({ cartCount }: { cartCount: number }) {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
@@ -56,26 +95,7 @@ export default function Header({ cartCount }: { cartCount: number }) {
         {/* Desktop Nav */}
         <nav className="hidden lg:flex items-center space-x-10">
           {navLinks.map((link) => (
-            <NavLink
-              key={link.name}
-              to={link.path}
-              className={({ isActive }) => cn(
-                "relative text-xs uppercase tracking-widest font-medium transition-colors hover:text-gold",
-                isActive ? "text-gold" : "text-white/70"
-              )}
-            >
-              {({ isActive }) => (
-                <>
-                  {link.name}
-                  {isActive && (
-                    <motion.div 
-                      layoutId="activeNav"
-                      className="absolute -bottom-1 left-0 w-full h-[1px] bg-gold"
-                    />
-                  )}
-                </>
-              )}
-            </NavLink>
+            <NavItem key={link.name} link={link} />
           ))}
         </nav>
 
